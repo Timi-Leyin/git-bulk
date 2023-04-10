@@ -1,26 +1,41 @@
 import cliSpinners from "cli-spinners";
 
-const loader = (sp: any, message?: string) => {
-  let i = 0,
-    msg = message || "";
-  const spinner = () => {
-    if (i >= sp.frames.length - 1) {
-      i = 0;
-    }
-    i++;
-    console.clear();
-    console.log(sp.frames[i], msg);
-  };
-  const interval = setInterval(spinner, sp.interval);
+class Loader {
+  private sp: any;
+  private message?: string;
+  private interval;
+  constructor(sp, message?: string) {
+    this.sp = sp;
+    this.message = message || "";
+  }
 
-  return {
-    stop() {
-      clearInterval(interval);
-    },
-    message(_msg){
-        msg =_msg
-    }
-  };
-};
+  load(m: string) {
+    let i = 0;
+    this.message = m;
+    const spinner = () => {
+      if (i >= this.sp.frames.length - 1) {
+        i = 0;
+      }
+      i++;
+      console.clear();
+      console.log(this.sp.frames[i], this.message);
+    };
+    this.interval = setInterval(spinner, this.sp.interval);
+    return this;
+  }
 
-export default loader;
+  text(m: string, timeout = 100) {
+    setTimeout(() => {
+      this.message = m;
+    }, timeout);
+    return this;
+  }
+
+  stop(timeout = 0) {
+    if (this.interval) {
+      setTimeout(() => clearInterval(this.interval), timeout);
+    }
+  }
+}
+
+export default Loader;

@@ -1,7 +1,7 @@
 import cliSpinners from "cli-spinners";
 import { Command } from "commander";
 import config from "./config";
-import loader from "./utils/loader";
+import Loader from "./utils/loader";
 const program = new Command();
 
 program
@@ -17,7 +17,8 @@ program
   .description("Clone repositories ")
   .argument("<string>", "single repo to clone")
   .action((str, option) => {
-    const tt = loader(cliSpinners.aesthetic, "Hey");
+    const loading = new Loader(cliSpinners.aesthetic);
+    loading.load("Initializing")
   });
 
 export default program;
