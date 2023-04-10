@@ -1,5 +1,7 @@
-import { Command } from 'commander';
-import config from './config';
+import cliSpinners from "cli-spinners";
+import { Command } from "commander";
+import config from "./config";
+import loader from "./utils/loader";
 const program = new Command();
 
 program
@@ -7,14 +9,15 @@ program
   .description(config.description)
   .version(config.version);
 
-program.command('clone')
-  .description('Clone repositories ')
-  .argument('<string>', 'string to split')
-  .option('--first', 'display just the first substring')
-  .option('-s, --separator <char>', 'separator character', ',')
-  .action((str, options) => {
-    const limit = options.first ? 1 : undefined;
-    console.log(str.split(options.separator, limit));
+/**
+ * CLONE COMMAND
+ * **/
+program
+  .command("clone")
+  .description("Clone repositories ")
+  .argument("<string>", "single repo to clone")
+  .action((str, option) => {
+    const tt = loader(cliSpinners.aesthetic, "Hey");
   });
 
 export default program;
