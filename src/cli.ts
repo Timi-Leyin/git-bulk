@@ -1,10 +1,7 @@
-// @ts-nocheck
-import cliSpinners from "cli-spinners";
 import { Command } from "commander";
+import cloneAction from "./actions/clone";
 import config from "./config";
-import Loader from "./utils/loader";
-import checkbox from "@inquirer/checkbox";
-import { spawn } from "child_process";
+
 const program = new Command();
 
 program
@@ -15,23 +12,16 @@ program
 /**
  * CLONE COMMAND
  * **/
+const { clone } = config.commands;
 program
-  .command("clone")
-  .description("Clone repositories ")
-  .argument("<username>", "User profile to clone from")
-  .action(async (str, option) => {
-    const init = new Loader(cliSpinners.aesthetic);
-    init.load("Initializing");
-    // console.log(checkbox)
-    const gitClone = spawn("git", ["--version"]);
-
-    gitClone.stdout.on("data", (data) => {
-      init.text("Using " + data, 1000);
-      // loading.load("Cloning")
-    });
-    gitClone.on("error", (error) => {
-      init.text("Exiting").stop(2000);
-    });
-  });
+  .command(clone.command)
+  .description(clone.description)
+  .argument(clone.argument[0], clone.argument[1])
+  .option(
+    clone.options.provider[0],
+    clone.options.provider[1],
+    clone.options.provider[2]
+  )
+  .action(cloneAction);
 
 export default program;
